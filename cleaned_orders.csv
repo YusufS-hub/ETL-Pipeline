@@ -1,0 +1,10 @@
+date,time,location,customer,price,payment_method,masked_card_number
+09/05/2023,10:17,Manchester,Mikasa Ackerman,3.2,CASH,
+09/05/2023,10:19,Birmingham,Light Yagami,3.0,CARD,XXXXXXXXXXXXXX22.0
+09/05/2023,10:21,Liverpool,Ichigo Kurosaki,2.5,CARD,XXXXXXXXXXXXXX33.0
+09/05/2023,10:23,London,Saber Artoria,4.4,CASH,
+09/05/2023,10:25,Manchester,Eren Yeager,4.75,CARD,XXXXXXXXXXXXXX44.0
+09/05/2023,10:26,Birmingham,Luffy D Monkey,4.1,CARD,XXXXXXXXXXXXXX55.0
+09/05/2023,10:28,Liverpool,Hinata Hyuga,3.1,CASH,
+09/05/2023,10:30,London,Goku Son,3.6,CARD,XXXXXXXXXXXXXX66.0
+09/05/2023,10:31,Manchester,Saitama Onepunch,5.65,CARD,XXXXXXXXXXXXXX77.0
