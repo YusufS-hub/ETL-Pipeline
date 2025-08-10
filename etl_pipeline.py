@@ -7,12 +7,12 @@ from dotenv import load_dotenv
 """Extract Raw From The CSV File"""
 df = pd.read_csv('main_data.csv')
 
-
+ 
 """Transfrom Extracted Data"""
 
 df.columns = ['datetime', 'location', 'customer', 'order', 'price', 'payment_method', 'card_number']
 
-# Split datetime into date and time
+
 df[['date', 'time']] = df['datetime'].str.split(' ', expand=True)
 df.drop(columns=['datetime'], inplace=True)
 
@@ -20,13 +20,12 @@ df.drop(columns=['datetime'], inplace=True)
 cols = ['date', 'time'] + [col for col in df.columns if col not in ['date', 'time']]
 df = df[cols]
 
-# Clean customer names
+
 df['customer'] = df['customer'].str.replace('.', '', regex=False)
 
 # Replace '-' with ',' to help split multiple orders
 df['order'] = df['order'].str.replace('-', ',', regex=False)
 
-# Split individual order items
 def split_orders(order_str):
     if pd.isna(order_str):
         return {}
@@ -42,28 +41,28 @@ def split_orders(order_str):
 order_split_df = df['order'].apply(split_orders)
 df = pd.concat([df.drop(columns=['order']), order_split_df], axis=1)
 
-# Mask card number safely
+
 df['masked_card_number'] = df['card_number'].astype(str).apply(
     lambda x: 'X' * (len(x) - 4) + x[-4:] if x != 'nan' else None
 )
 df.drop(columns=['card_number'], inplace=True)
 
-# Drop duplicate rows
+
 df = df.drop_duplicates()
 
-# Report null values (optional debug)
+
 print("Null values per column:\n", df.isnull().sum())
 
-# Final cleaned DataFrame
+
 print(df)
 
 
 
 """Load Transformed Data Into Database Using psycopg2"""
 df.to_csv('cleaned_orders.csv', index=False)
-print('Cleaned data saved to 'cleaned_orders.csv'')
+print('Cleaned data saved to ', 'cleaned_orders.csv')
 
-# Connect to PostgreSQL
+# Connect to Database
 load_dotenv()
 host_name = os.environ.get("POSTGRES_HOST")
 database_name = os.environ.get("POSTGRES_DB")
@@ -74,8 +73,7 @@ with psycopg.connect(
             host=host_name,
             dbname=database_name,
             user=user_name,
-            password=user_password
-        ) as connection:
+            password=user_password) as connection:
             cursor = connection.cursor()
     
 cursor = connection.cursor()
@@ -98,10 +96,9 @@ masked_card_number TEXT
 
 cursor.execute(create_table_query)
 
-# Optional: clear existing data
 cursor.execute("DELETE FROM orders")
 
-# Insert rows
+
 for _, row in df.iterrows():
     cursor.execute("""
         INSERT INTO orders (
